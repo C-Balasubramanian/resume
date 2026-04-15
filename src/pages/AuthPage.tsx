@@ -4,12 +4,26 @@ import { Sparkles, ArrowRight, Mail, Lock, User } from 'lucide-react';
 
 export function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate authentication
-    navigate('/builder');
+    setError('');
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get('email');
+    const password = formData.get('password');
+
+    if (isLogin) {
+      if (email === 'bala@gmail.com' && password === 'Bala@123') {
+        navigate('/builder');
+      } else {
+        setError('Invalid email or password');
+      }
+    } else {
+      setError('Registration is currently disabled. Please sign in with the allowed account.');
+    }
   };
 
   return (
@@ -36,6 +50,11 @@ export function AuthPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                {error}
+              </div>
+            )}
             {!isLogin && (
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -144,7 +163,7 @@ export function AuthPage() {
               <div>
                 <button
                   type="button"
-                  onClick={() => navigate('/builder')}
+                  onClick={() => setError('Social login is disabled. Please use email and password.')}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <span className="sr-only">Sign in with Google</span>
@@ -157,7 +176,7 @@ export function AuthPage() {
               <div>
                 <button
                   type="button"
-                  onClick={() => navigate('/builder')}
+                  onClick={() => setError('Social login is disabled. Please use email and password.')}
                   className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                 >
                   <span className="sr-only">Sign in with GitHub</span>
