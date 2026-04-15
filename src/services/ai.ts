@@ -79,7 +79,9 @@ ${notes}`,
                 items: { type: Type.ARRAY, items: { type: Type.STRING } }
               }
             }
-          }
+          },
+          declaration: { type: Type.STRING, description: "A formal declaration statement at the end of the resume, if present." },
+          signature: { type: Type.STRING, description: "The name used for the signature at the bottom of the resume, usually the person's name." }
         },
         required: ["personal", "summary", "experience", "education", "skills"]
       }
@@ -87,7 +89,13 @@ ${notes}`,
   });
 
   try {
-    return JSON.parse(response.text || "{}") as ResumeData;
+    let cleanText = response.text || "{}";
+    if (cleanText.startsWith("```json")) {
+      cleanText = cleanText.replace(/^```json\n/, "").replace(/\n```$/, "");
+    } else if (cleanText.startsWith("```")) {
+      cleanText = cleanText.replace(/^```\n/, "").replace(/\n```$/, "");
+    }
+    return JSON.parse(cleanText) as ResumeData;
   } catch (e) {
     console.error("Failed to parse AI response", e);
     throw new Error("Failed to generate resume from notes.");

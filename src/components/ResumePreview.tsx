@@ -18,31 +18,31 @@ const ClassicTemplate = ({ data }: { data: ResumeData }) => (
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 border-y border-gray-800 py-3 mt-6 text-sm text-gray-800">
           {data.personal.phone && (
             <div className="flex items-start gap-1.5">
-              <span className="pt-[5px] flex shrink-0"><Phone size={14} className="text-slate-800" /></span>
+              <span className="pt-[10px] flex shrink-0"><Phone size={14} className="text-slate-800" /></span>
               <span className="leading-relaxed">{data.personal.phone}</span>
             </div>
           )}
           {data.personal.location && (
             <div className="flex items-start gap-1.5">
-              <span className="pt-[5px] flex shrink-0"><MapPin size={14} className="text-slate-800" /></span>
+              <span className="pt-[10px] flex shrink-0"><MapPin size={14} className="text-slate-800" /></span>
               <span className="leading-relaxed">{data.personal.location}</span>
             </div>
           )}
           {data.personal.email && (
             <div className="flex items-start gap-1.5">
-              <span className="pt-[5px] flex shrink-0"><Mail size={14} className="text-slate-800" /></span>
+              <span className="pt-[10px] flex shrink-0"><Mail size={14} className="text-slate-800" /></span>
               <span className="leading-relaxed">{data.personal.email}</span>
             </div>
           )}
           {data.personal.linkedin && (
             <div className="flex items-start gap-1.5">
-              <span className="pt-[5px] flex shrink-0"><Linkedin size={14} className="text-slate-800" /></span>
+              <span className="pt-[10px] flex shrink-0"><Linkedin size={14} className="text-slate-800" /></span>
               <span className="leading-relaxed">{data.personal.linkedin}</span>
             </div>
           )}
           {data.personal.website && (
             <div className="flex items-start gap-1.5">
-              <span className="pt-[5px] flex shrink-0"><Globe size={14} className="text-slate-800" /></span>
+              <span className="pt-[10px] flex shrink-0"><Globe size={14} className="text-slate-800" /></span>
               <span className="leading-relaxed">{data.personal.website}</span>
             </div>
           )}
@@ -107,7 +107,7 @@ const ClassicTemplate = ({ data }: { data: ResumeData }) => (
 
       {/* Experience */}
       {data.experience.length > 0 && (
-        <div className="mb-6 break-before-page html2pdf__page-break">
+        <div className="mb-6 html2pdf__page-break break-before-page">
           <h3 className="text-lg font-bold text-slate-900 uppercase tracking-wide mb-2">Experience</h3>
           <div className="w-full h-[1px] bg-gray-400 mb-4"></div>
           
@@ -170,22 +170,21 @@ const ClassicTemplate = ({ data }: { data: ResumeData }) => (
         </div>
       )}
 
-      {/* Spacer to push Declaration to bottom */}
-      <div className="flex-grow"></div>
-
       {/* Declaration */}
-      <div className="pt-4 pb-4 break-inside-avoid">
-        <h3 className="text-lg font-bold text-slate-900 mb-4">Declaration</h3>
-        <p className="text-sm text-gray-700 mb-12">
-          I hereby declare that the information provided above is true and correct to the best of my knowledge and belief
-        </p>
-        <div className="flex justify-end text-sm text-gray-800">
-          <div className="flex flex-col items-center">
-            <div className="mb-8">Thanking you,</div>
-            <div className="font-medium">{data.personal.name}</div>
+      {data.declaration && (
+        <div className="pt-4 pb-4 break-inside-avoid mt-auto">
+          <h3 className="text-lg font-bold text-slate-900 mb-4">Declaration</h3>
+          <p className="text-sm text-gray-700 mb-12">
+            {data.declaration}
+          </p>
+          <div className="flex justify-end text-sm text-gray-800">
+            <div className="flex flex-col items-center">
+              <div className="mb-8">Thanking you,</div>
+              <div className="font-medium">{data.signature !== undefined ? data.signature : data.personal.name}</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   </div>
 );

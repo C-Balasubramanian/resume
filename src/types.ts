@@ -38,4 +38,6 @@ export interface ResumeData {
   experience: Experience[];
   education: Education[];
   skills: SkillCategory[];
+  declaration?: string;
+  signature?: string;
 }

@@ -49,15 +49,22 @@ export function ResumeEditor({ data, onChange }: Props) {
     if (!file) return;
 
     try {
+      setIsImporting(true);
       let text = '';
       if (file.type === 'application/pdf') {
         text = await extractTextFromPdf(file);
       } else {
         text = await file.text();
       }
-      setNotes(prev => prev ? prev + '\n\n' + text : text);
+      
+      // Automatically generate resume from the uploaded file text
+      const generated = await generateResumeFromNotes(text);
+      onChange(generated);
+      setNotes(text); // Show the extracted text in the input box
     } catch (error) {
-      alert('Failed to read file. Please try pasting the text instead.');
+      alert('Failed to read or process file. Please try pasting the text instead.');
+    } finally {
+      setIsImporting(false);
     }
     
     // Reset file input
@@ -438,6 +445,48 @@ export function ResumeEditor({ data, onChange }: Props) {
           </div>
           )}
         </div>
+        {/* Declaration */}
+        <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <button 
+            onClick={() => setActiveTab(activeTab === 'declaration' ? '' : 'declaration')}
+            className={`w-full flex items-center justify-between p-4 transition-colors ${activeTab === 'declaration' ? 'bg-indigo-50/50' : 'bg-white hover:bg-gray-50'}`}
+          >
+            <div className={`flex items-center gap-2 font-medium ${activeTab === 'declaration' ? 'text-indigo-700' : 'text-gray-800'}`}>
+              <FileText className={`w-5 h-5 ${activeTab === 'declaration' ? 'text-indigo-600' : 'text-gray-500'}`} />
+              Declaration
+            </div>
+            {activeTab === 'declaration' ? <ChevronUp className="w-5 h-5 text-indigo-500" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+          </button>
+          {activeTab === 'declaration' && (
+            <div className="p-4 border-t border-gray-200 space-y-4">
+              <div className="relative">
+                <label className="block text-xs font-medium text-gray-700 mb-1">Declaration Text</label>
+                <textarea
+                  value={data.declaration || ''}
+                  onChange={e => onChange({ ...data, declaration: e.target.value })}
+                  className="w-full h-24 p-3 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 pb-10"
+                  placeholder="I hereby declare that the information provided above is true and correct to the best of my knowledge and belief."
+                />
+                <EnhanceButton 
+                  text={data.declaration || ''} 
+                  context="A formal declaration statement at the end of a resume" 
+                  onEnhance={(text) => onChange({ ...data, declaration: text })} 
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Signature Name</label>
+                <input 
+                  type="text" 
+                  value={data.signature !== undefined ? data.signature : data.personal.name} 
+                  onChange={e => onChange({ ...data, signature: e.target.value })} 
+                  className="w-full p-2 border border-gray-300 rounded-md text-sm" 
+                  placeholder="e.g. John Doe" 
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

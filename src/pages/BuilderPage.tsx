@@ -42,7 +42,8 @@ const initialData: ResumeData = {
     { category: 'Frontend Program', items: ['React JS', 'Next JS', 'Javascript', 'HTML', 'CSS', 'Material Design', 'Bootstrap', 'Tailwind CSS'] },
     { category: 'Backend Program', items: ['Node JS', 'Python', 'Typescript', 'PHP'] },
     { category: 'Server Handling', items: ['Mongo DB', 'Gitlab'] }
-  ]
+  ],
+  declaration: 'I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.'
 };
 
 export function BuilderPage() {
